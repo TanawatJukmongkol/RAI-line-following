@@ -6,7 +6,7 @@
 #    By: tjukmong <tjukmong@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/27 03:49:12 by Tanawat J.        #+#    #+#              #
-#    Updated: 2023/11/08 19:51:30 by Tanawat J.       ###   ########.fr        #
+#    Updated: 2023/11/08 20:57:20 by Tanawat J.       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ CHIP		= atmega328p
 PORT		= /dev/ttyACM0
 BAUDRATE	= 115200
 F_CPU		= 16000000UL
+# BAUDRATE	= 9600
+# F_CPU		= 1000000L
 
 DEFINES		= -DBAUD=${BAUDRATE} -DF_CPU=${F_CPU}
 
@@ -51,7 +53,9 @@ ${BUILD_DIR}/%.o: ${SRC_DIR}/%.${EXTENSION}
 
 bin: init ${BUILD_DIR}
 
-${NAME}: bin ${OBJ_PATH}
+${NAME}: bin flash serial
+
+${HEX}: ${OBJ_PATH}
 	$(CC) -mmcu=${CHIP} ${OBJ_PATH} ${INCLUDE_SRC} ${DEFINES} -o ${NAME}
 	avr-objcopy -O ihex -R .eeprom ${NAME} ${HEX}
 
